@@ -42,6 +42,7 @@
       display: flex;
       overflow-x: auto;
       gap: 40px;
+      scroll-behavior: smooth;
     }
     .cuatrimestre {
       min-width: 250px;
@@ -97,6 +98,24 @@
     .color-neg { background-color: #b2e0f7; }
     .color-tech { background-color: #c3f7d6; }
     .color-opt { background-color: #e0e0e0; }
+    .scroll-controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .scroll-controls button {
+      padding: 6px 12px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      background-color: #ddd;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .scroll-controls button:hover {
+      background-color: #bbb;
+    }
   </style>
 </head>
 <body>
@@ -110,6 +129,10 @@
     <div><span class="color color-neg"></span> Negocios / Economía</div>
     <div><span class="color color-tech"></span> Tecnología / Datos</div>
     <div><span class="color color-opt"></span> Optativas / Finales</div>
+  </div>
+  <div class="scroll-controls">
+    <button onclick="scrollMalla(-1)">⬅️ Cuat. anterior</button>
+    <button onclick="scrollMalla(1)">Cuat. siguiente ➡️</button>
   </div>
   <div class="malla" id="malla"></div>
 
@@ -125,7 +148,16 @@
       { nombre: "Gestión de las Personas", cuatri: "1B", color: "admin", correlativas: [] },
       { nombre: "Contabilidad I", cuatri: "1B", color: "conta", correlativas: [] },
       { nombre: "Historia Económica Mundial", cuatri: "1B", color: "human", correlativas: [] },
-      // Puedes seguir agregando el resto así ↓
+      { nombre: "Microeconomía", cuatri: "2A", color: "neg", correlativas: [] },
+      { nombre: "Matemática Empresarial II", cuatri: "2A", color: "mate", correlativas: ["Matemática Empresarial I"] },
+      { nombre: "Plataformas y Negocios Web", cuatri: "2A", color: "tech", correlativas: [] },
+      { nombre: "Derecho del Trabajo Individual", cuatri: "2A", color: "human", correlativas: ["Introducción al Derecho"] },
+      { nombre: "Desarrollo Internacional de Negocios", cuatri: "2A", color: "neg", correlativas: ["Marketing"] },
+      { nombre: "Obligaciones, Contratos y Sociedades", cuatri: "2B", color: "human", correlativas: ["Introducción al Derecho"] },
+      { nombre: "Macroeconomía", cuatri: "2B", color: "neg", correlativas: [] },
+      { nombre: "Estadística Empresarial II", cuatri: "2B", color: "mate", correlativas: ["Estadística Empresarial I"] },
+      { nombre: "Diseño y Auditoría de Sistemas", cuatri: "2B", color: "tech", correlativas: ["Administración Empresarial II"] },
+      { nombre: "Contabilidad Gerencial", cuatri: "2B", color: "conta", correlativas: ["Contabilidad I"] },
     ];
 
     const cuatris = {};
@@ -193,6 +225,12 @@
         m.el.classList.toggle("bloqueada", !habilitada);
         m.el.style.opacity = habilitada ? "1" : "0.3";
       });
+    }
+
+    function scrollMalla(direccion) {
+      const container = document.querySelector(".malla");
+      const width = container.offsetWidth;
+      container.scrollBy({ left: direccion * width, behavior: 'smooth' });
     }
 
     window.onload = () => {
