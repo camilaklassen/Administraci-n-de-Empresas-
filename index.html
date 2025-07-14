@@ -1,258 +1,179 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<title>Malla Interactiva con Correlativas</title>
-<style>
-  body { font-family: sans-serif; padding: 2em; background: #f4f4f4; }
-  h1 { color: #2c3e50; }
-  table { border-collapse: collapse; width: 100%; margin-bottom: 2em; }
-  th, td { border: 1px solid #ccc; padding: 10px; text-align: left; vertical-align: top; cursor: pointer; }
-  .cursada { text-decoration: line-through; color: gray; }
-  .habilitada { background-color: #d0f0c0; }
-  .inhabilitada { color: #bbb; }
-  /* Tooltip */
-  td[title] {
-    position: relative;
-  }
-  td[title]:hover::after {
-    content: attr(title);
-    position: absolute;
-    left: 0; top: 100%;
-    background: #333; color: #fff; padding: 4px 8px;
-    border-radius: 4px; white-space: nowrap;
-    z-index: 10;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Malla Interactiva - Administración de Empresas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f7f9fc;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .cuatrimestre {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 10px auto;
+      max-width: 800px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #2980b9;
+    }
+
+    .materia {
+      display: flex;
+      align-items: center;
+      margin: 6px 0;
+    }
+
+    .materia input {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    .materia label {
+      flex-grow: 1;
+      cursor: pointer;
+      transition: color 0.2s ease-in-out;
+    }
+
+    .materia label.tachada {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+
+    .bloqueada {
+      color: #bbb;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #888;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
+  <h1>Malla Interactiva<br>Licenciatura en Administración de Empresas</h1>
 
-<h1>Malla Interactiva - Licenciatura en Administración de Empresas</h1>
-<p>Haz clic en cada materia para marcarla como <strong>cursada</strong>. Las materias habilitadas para cursar se resaltan en verde.</p>
+  <div id="malla"></div>
 
-<table>
-  <thead>
-    <tr>
-      <th>1° Cuatrimestre (1° Año)</th>
-      <th>2° Cuatrimestre (1° Año)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="materia" data-nombre="Administración Empresarial I" title="Correlativas: Administración Empresarial II">Administración Empresarial I</td>
-      <td class="materia" data-nombre="Administración Empresarial II" title="Correlativas: Gerencia de Operaciones, Dirección Estratégica, Liderazgo y Negociación, Diseño y Auditoría de Sistemas de Información, Nuevas Tendencias de Administración">Administración Empresarial II</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Marketing" title="Correlativas: Desarrollo Internacional de Negocios">Marketing</td>
-      <td class="materia" data-nombre="Estadística Empresarial I" title="Correlativas: Estadística Empresarial II">Estadística Empresarial I</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Escritura y Oralidad" title="">Escritura y Oralidad</td>
-      <td class="materia" data-nombre="Gestión de las Personas en las Organizaciones" title="">Gestión de las Personas en las Organizaciones</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Introducción al Derecho" title="Correlativas: Obligaciones, Contratos y Sociedades; Derecho del Trabajo Individual">Introducción al Derecho</td>
-      <td class="materia" data-nombre="Contabilidad I" title="Correlativas: Contabilidad Gerencial, Sistemas de Costos">Contabilidad I</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Matemática Empresarial I" title="Correlativas: Matemática Empresarial II, Cálculo Financiero">Matemática Empresarial I</td>
-      <td class="materia" data-nombre="Historia Económica Mundial" title="">Historia Económica Mundial</td>
-    </tr>
-  </tbody>
-</table>
+  <footer>
+    Hecho por Camila Klassen · GitHub Pages 💻
+  </footer>
 
-<table>
-  <thead>
-    <tr>
-      <th>1° Cuatrimestre (2° Año)</th>
-      <th>2° Cuatrimestre (2° Año)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="materia" data-nombre="Microeconomía" title="">Microeconomía</td>
-      <td class="materia" data-nombre="Obligaciones, Contratos y Sociedades" title="">Obligaciones, Contratos y Sociedades</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Matemática Empresarial II" title="">Matemática Empresarial II</td>
-      <td class="materia" data-nombre="Macroeconomía" title="">Macroeconomía</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Plataformas y Negocios Web" title="">Plataformas y Negocios Web</td>
-      <td class="materia" data-nombre="Estadística Empresarial II" title="">Estadística Empresarial II</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Derecho del Trabajo Individual" title="">Derecho del Trabajo Individual</td>
-      <td class="materia" data-nombre="Diseño y Auditoría de Sistemas de Información" title="">Diseño y Auditoría de Sistemas de Información</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Desarrollo Internacional de Negocios" title="">Desarrollo Internacional de Negocios</td>
-      <td class="materia" data-nombre="Contabilidad Gerencial" title="">Contabilidad Gerencial</td>
-    </tr>
-  </tbody>
-</table>
+  <script>
+    const materias = [
+      { nombre: "Administración Empresarial I", cuatrimestre: "1° Año - 1° Cuatrimestre", correlativas: [], id: "adm1" },
+      { nombre: "Marketing", cuatrimestre: "1° Año - 1° Cuatrimestre", correlativas: [], id: "mkt" },
+      { nombre: "Escritura y Oralidad", cuatrimestre: "1° Año - 1° Cuatrimestre", correlativas: [], id: "escr" },
+      { nombre: "Introducción al Derecho", cuatrimestre: "1° Año - 1° Cuatrimestre", correlativas: [], id: "der1" },
+      { nombre: "Matemática Empresarial I", cuatrimestre: "1° Año - 1° Cuatrimestre", correlativas: [], id: "mat1" },
 
-<table>
-  <thead>
-    <tr>
-      <th>1° Cuatrimestre (3° Año)</th>
-      <th>2° Cuatrimestre (3° Año)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="materia" data-nombre="Optativa I" title="">Optativa I</td>
-      <td class="materia" data-nombre="Optativa III" title="">Optativa III</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Optativa II" title="">Optativa II</td>
-      <td class="materia" data-nombre="Impuestos" title="">Impuestos</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Cálculo Financiero" title="">Cálculo Financiero</td>
-      <td class="materia" data-nombre="Gerencia de Operaciones" title="">Gerencia de Operaciones</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Sistemas de Costos" title="">Sistemas de Costos</td>
-      <td class="materia" data-nombre="Liderazgo y Negociación" title="">Liderazgo y Negociación</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Programación Operativa" title="">Programación Operativa</td>
-      <td class="materia" data-nombre="Finanzas Corporativas I" title="">Finanzas Corporativas I</td>
-    </tr>
-  </tbody>
-</table>
+      { nombre: "Administración Empresarial II", cuatrimestre: "1° Año - 2° Cuatrimestre", correlativas: ["adm1"], id: "adm2" },
+      { nombre: "Estadística Empresarial I", cuatrimestre: "1° Año - 2° Cuatrimestre", correlativas: [], id: "est1" },
+      { nombre: "Gestión de las Personas", cuatrimestre: "1° Año - 2° Cuatrimestre", correlativas: [], id: "gest" },
+      { nombre: "Contabilidad I", cuatrimestre: "1° Año - 2° Cuatrimestre", correlativas: [], id: "cont1" },
+      { nombre: "Historia Económica Mundial", cuatrimestre: "1° Año - 2° Cuatrimestre", correlativas: [], id: "hist" },
 
-<table>
-  <thead>
-    <tr>
-      <th>1° Cuatrimestre (4° Año)</th>
-      <th>2° Cuatrimestre (4° Año)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="materia" data-nombre="Optativa IV" title="">Optativa IV</td>
-      <td class="materia" data-nombre="Optativa V" title="">Optativa V</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Dirección Estratégica" title="">Dirección Estratégica</td>
-      <td class="materia" data-nombre="Análisis Estratégico de Datos" title="">Análisis Estratégico de Datos</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Control de Gestión" title="">Control de Gestión</td>
-      <td class="materia" data-nombre="Desarrollo Empresarial" title="">Desarrollo Empresarial</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Nuevas Tendencias en Administración" title="">Nuevas Tendencias en Administración</td>
-      <td class="materia" data-nombre="Simulaciones y Toma de Decisiones en Negocios" title="">Simulaciones y Toma de Decisiones en Negocios</td>
-    </tr>
-    <tr>
-      <td class="materia" data-nombre="Consultoría" title="">Consultoría</td>
-      <td class="materia" data-nombre="Trabajo Integrador Final en Administración" title="">Trabajo Integrador Final en Administración</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="materia" data-nombre="Examen de Inglés" title="">Examen de Inglés</td>
-    </tr>
-  </tbody>
-</table>
+      { nombre: "Matemática Empresarial II", cuatrimestre: "2° Año - 1° Cuatrimestre", correlativas: ["mat1"], id: "mat2" },
+      { nombre: "Microeconomía", cuatrimestre: "2° Año - 1° Cuatrimestre", correlativas: [], id: "micro" },
+      { nombre: "Derecho del Trabajo Individual", cuatrimestre: "2° Año - 1° Cuatrimestre", correlativas: ["der1"], id: "der2" },
+      { nombre: "Plataformas y Negocios Web", cuatrimestre: "2° Año - 1° Cuatrimestre", correlativas: [], id: "web" },
+      { nombre: "Desarrollo Internacional de Negocios", cuatrimestre: "2° Año - 1° Cuatrimestre", correlativas: ["mkt"], id: "din" },
 
-<script>
-// Correlativas definidas como un mapa
-const correlativas = {
-  "Administración Empresarial II": ["Administración Empresarial I"],
-  "Marketing": [],
-  "Escritura y Oralidad": [],
-  "Introducción al Derecho": [],
-  "Matemática Empresarial I": [],
-  "Administración Empresarial II": ["Administración Empresarial I"],
-  "Estadística Empresarial I": [],
-  "Gestión de las Personas en las Organizaciones": [],
-  "Contabilidad I": [],
-  "Historia Económica Mundial": [],
-  "Microeconomía": [],
-  "Matemática Empresarial II": ["Matemática Empresarial I"],
-  "Plataformas y Negocios Web": [],
-  "Derecho del Trabajo Individual": ["Introducción al Derecho"],
-  "Desarrollo Internacional de Negocios": ["Marketing"],
-  "Obligaciones, Contratos y Sociedades": ["Introducción al Derecho"],
-  "Macroeconomía": [],
-  "Estadística Empresarial II": ["Estadística Empresarial I"],
-  "Diseño y Auditoría de Sistemas de Información": ["Administración Empresarial II"],
-  "Contabilidad Gerencial": ["Contabilidad I"],
-  "Optativa I": [],
-  "Optativa II": [],
-  "Cálculo Financiero": ["Matemática Empresarial I"],
-  "Sistemas de Costos": ["Contabilidad I"],
-  "Programación Operativa": [],
-  "Optativa III": [],
-  "Impuestos": ["Contabilidad Gerencial"],
-  "Gerencia de Operaciones": ["Administración Empresarial II"],
-  "Liderazgo y Negociación": ["Administración Empresarial II"],
-  "Finanzas Corporativas I": ["Cálculo Financiero"],
-  "Optativa IV": [],
-  "Dirección Estratégica": ["Administración Empresarial II"],
-  "Control de Gestión": ["Sistemas de Costos"],
-  "Nuevas Tendencias en Administración": ["Administración Empresarial II"],
-  "Consultoría": [],
-  "Optativa V": [],
-  "Análisis Estratégico de Datos": [],
-  "Desarrollo Empresarial": [],
-  "Simulaciones y Toma de Decisiones en Negocios": ["Dirección Estratégica"],
-  "Trabajo Integrador Final en Administración": [],
-  "Examen de Inglés": []
-};
+      { nombre: "Estadística Empresarial II", cuatrimestre: "2° Año - 2° Cuatrimestre", correlativas: ["est1"], id: "est2" },
+      { nombre: "Macroeconomía", cuatrimestre: "2° Año - 2° Cuatrimestre", correlativas: [], id: "macro" },
+      { nombre: "Obligaciones, Contratos y Sociedades", cuatrimestre: "2° Año - 2° Cuatrimestre", correlativas: ["der1"], id: "ocs" },
+      { nombre: "Diseño y Auditoría de Sistemas", cuatrimestre: "2° Año - 2° Cuatrimestre", correlativas: ["adm2"], id: "sis" },
+      { nombre: "Contabilidad Gerencial", cuatrimestre: "2° Año - 2° Cuatrimestre", correlativas: ["cont1"], id: "cont2" },
 
-// Cargar estado de materias cursadas desde localStorage
-let cursadas = JSON.parse(localStorage.getItem("materiasCursadas") || "[]");
+      { nombre: "Sistemas de Costos", cuatrimestre: "3° Año - 1° Cuatrimestre", correlativas: ["cont1"], id: "costos" },
+      { nombre: "Cálculo Financiero", cuatrimestre: "3° Año - 1° Cuatrimestre", correlativas: ["mat2"], id: "calc" },
+      { nombre: "Programación Operativa", cuatrimestre: "3° Año - 1° Cuatrimestre", correlativas: [], id: "prog" },
 
-// Actualizar visualmente el estado
-function actualizarEstado() {
-  const materias = document.querySelectorAll(".materia");
-  materias.forEach(td => {
-    const nombre = td.dataset.nombre;
-    if (cursadas.includes(nombre)) {
-      td.classList.add("cursada");
-    } else {
-      td.classList.remove("cursada");
+      { nombre: "Gerencia de Operaciones", cuatrimestre: "3° Año - 2° Cuatrimestre", correlativas: ["adm2"], id: "gerencia" },
+      { nombre: "Liderazgo y Negociación", cuatrimestre: "3° Año - 2° Cuatrimestre", correlativas: ["adm2"], id: "lider" },
+      { nombre: "Impuestos", cuatrimestre: "3° Año - 2° Cuatrimestre", correlativas: ["cont2"], id: "impuestos" },
+      { nombre: "Finanzas Corporativas I", cuatrimestre: "3° Año - 2° Cuatrimestre", correlativas: ["calc"], id: "finanzas" },
+
+      { nombre: "Dirección Estratégica", cuatrimestre: "4° Año - 1° Cuatrimestre", correlativas: ["adm2"], id: "estrategia" },
+      { nombre: "Nuevas Tendencias en Administración", cuatrimestre: "4° Año - 1° Cuatrimestre", correlativas: ["adm2", "gerencia"], id: "nuevas" },
+      { nombre: "Consultoría", cuatrimestre: "4° Año - 1° Cuatrimestre", correlativas: [], id: "consultoria" },
+      { nombre: "Control de Gestión", cuatrimestre: "4° Año - 1° Cuatrimestre", correlativas: ["costos"], id: "control" },
+
+      { nombre: "Simulaciones y Toma de Decisiones", cuatrimestre: "4° Año - 2° Cuatrimestre", correlativas: ["estrategia", "cont2"], id: "simu" },
+      { nombre: "Desarrollo Empresarial", cuatrimestre: "4° Año - 2° Cuatrimestre", correlativas: ["finanzas", "costos"], id: "desarrollo" },
+      { nombre: "Análisis Estratégico de Datos", cuatrimestre: "4° Año - 2° Cuatrimestre", correlativas: [], id: "datos" },
+      { nombre: "Trabajo Integrador Final en Administración", cuatrimestre: "4° Año - 2° Cuatrimestre", correlativas: [], id: "tif" },
+      { nombre: "Examen de Inglés", cuatrimestre: "4° Año - 2° Cuatrimestre", correlativas: [], id: "ingles" },
+    ];
+
+    const estadoMaterias = {};
+
+    function renderMalla() {
+      const container = document.getElementById("malla");
+      container.innerHTML = "";
+      const cuatrimestres = [...new Set(materias.map(m => m.cuatrimestre))];
+
+      cuatrimestres.forEach(cuatri => {
+        const div = document.createElement("div");
+        div.className = "cuatrimestre";
+        div.innerHTML = `<h2>${cuatri}</h2>`;
+
+        materias.filter(m => m.cuatrimestre === cuatri).forEach(m => {
+          const bloqueada = m.correlativas.some(c => !estadoMaterias[c]);
+
+          const materiaDiv = document.createElement("div");
+          materiaDiv.className = "materia";
+
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.id = m.id;
+          checkbox.disabled = bloqueada;
+          checkbox.checked = estadoMaterias[m.id] || false;
+          checkbox.onchange = () => {
+            estadoMaterias[m.id] = checkbox.checked;
+            localStorage.setItem("estadoMaterias", JSON.stringify(estadoMaterias));
+            renderMalla();
+          };
+
+          const label = document.createElement("label");
+          label.htmlFor = m.id;
+          label.innerText = m.nombre;
+          if (checkbox.checked) label.classList.add("tachada");
+          if (bloqueada && !checkbox.checked) label.classList.add("bloqueada");
+
+          materiaDiv.appendChild(checkbox);
+          materiaDiv.appendChild(label);
+          div.appendChild(materiaDiv);
+        });
+
+        container.appendChild(div);
+      });
     }
-  });
 
-  // Luego actualizar qué materias están habilitadas (correlativas cumplidas)
-  materias.forEach(td => {
-    const nombre = td.dataset.nombre;
-    const reqs = correlativas[nombre] || [];
-    // Una materia está habilitada si todas sus correlativas están en cursadas
-    const habilitada = reqs.every(req => cursadas.includes(req));
-    if (habilitada) {
-      td.classList.add("habilitada");
-      td.classList.remove("inhabilitada");
-    } else {
-      td.classList.remove("habilitada");
-      td.classList.add("inhabilitada");
-    }
-  });
-}
-
-// Cuando clickeás en una materia, la marcas o desmarcas como cursada
-document.querySelectorAll(".materia").forEach(td => {
-  td.addEventListener("click", () => {
-    const nombre = td.dataset.nombre;
-    if (cursadas.includes(nombre)) {
-      cursadas = cursadas.filter(m => m !== nombre);
-    } else {
-      cursadas.push(nombre);
-    }
-    localStorage.setItem("materiasCursadas", JSON.stringify(cursadas));
-    actualizarEstado();
-  });
-});
-
-// Al cargar la página, actualizamos el estado
-actualizarEstado();
-</script>
-
+    document.addEventListener("DOMContentLoaded", () => {
+      const saved = localStorage.getItem("estadoMaterias");
+      if (saved) Object.assign(estadoMaterias, JSON.parse(saved));
+      renderMalla();
+    });
+  </script>
 </body>
 </html>
 Actualizar malla interactiva
