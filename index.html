@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Malla de Administración de Empresas</title>
   <style>
     body {
@@ -68,6 +68,9 @@
       text-decoration: line-through;
       opacity: 0.6;
     }
+    .materia.bloqueada {
+      cursor: not-allowed;
+    }
     .materia .nota {
       font-size: 16px;
       cursor: pointer;
@@ -90,6 +93,8 @@
       height: 60px;
       border: none;
       resize: none;
+      font-family: inherit;
+      font-size: 14px;
     }
     .color-admin { background-color: #a7e9af; }
     .color-mate { background-color: #d6c7f7; }
@@ -138,26 +143,55 @@
 
   <script>
     const materias = [
+      // 1° Año - 1° Cuatrimestre
       { nombre: "Administración Empresarial I", cuatri: "1A", color: "admin", correlativas: [] },
       { nombre: "Marketing", cuatri: "1A", color: "neg", correlativas: [] },
       { nombre: "Escritura y Oralidad", cuatri: "1A", color: "human", correlativas: [] },
       { nombre: "Introducción al Derecho", cuatri: "1A", color: "human", correlativas: [] },
       { nombre: "Matemática Empresarial I", cuatri: "1A", color: "mate", correlativas: [] },
+      // 1° Año - 2° Cuatrimestre
       { nombre: "Administración Empresarial II", cuatri: "1B", color: "admin", correlativas: ["Administración Empresarial I"] },
       { nombre: "Estadística Empresarial I", cuatri: "1B", color: "mate", correlativas: [] },
       { nombre: "Gestión de las Personas", cuatri: "1B", color: "admin", correlativas: [] },
       { nombre: "Contabilidad I", cuatri: "1B", color: "conta", correlativas: [] },
       { nombre: "Historia Económica Mundial", cuatri: "1B", color: "human", correlativas: [] },
+      // 2° Año - 1° Cuatrimestre
       { nombre: "Microeconomía", cuatri: "2A", color: "neg", correlativas: [] },
       { nombre: "Matemática Empresarial II", cuatri: "2A", color: "mate", correlativas: ["Matemática Empresarial I"] },
       { nombre: "Plataformas y Negocios Web", cuatri: "2A", color: "tech", correlativas: [] },
       { nombre: "Derecho del Trabajo Individual", cuatri: "2A", color: "human", correlativas: ["Introducción al Derecho"] },
       { nombre: "Desarrollo Internacional de Negocios", cuatri: "2A", color: "neg", correlativas: ["Marketing"] },
+      // 2° Año - 2° Cuatrimestre
       { nombre: "Obligaciones, Contratos y Sociedades", cuatri: "2B", color: "human", correlativas: ["Introducción al Derecho"] },
       { nombre: "Macroeconomía", cuatri: "2B", color: "neg", correlativas: [] },
       { nombre: "Estadística Empresarial II", cuatri: "2B", color: "mate", correlativas: ["Estadística Empresarial I"] },
       { nombre: "Diseño y Auditoría de Sistemas", cuatri: "2B", color: "tech", correlativas: ["Administración Empresarial II"] },
       { nombre: "Contabilidad Gerencial", cuatri: "2B", color: "conta", correlativas: ["Contabilidad I"] },
+      // 3° Año - 1° Cuatrimestre
+      { nombre: "Optativa I", cuatri: "3A", color: "opt", correlativas: [] },
+      { nombre: "Optativa II", cuatri: "3A", color: "opt", correlativas: [] },
+      { nombre: "Cálculo Financiero", cuatri: "3A", color: "mate", correlativas: ["Matemática Empresarial II"] },
+      { nombre: "Sistemas de Costos", cuatri: "3A", color: "conta", correlativas: [] },
+      { nombre: "Programación Operativa", cuatri: "3A", color: "tech", correlativas: [] },
+      // 3° Año - 2° Cuatrimestre
+      { nombre: "Optativa III", cuatri: "3B", color: "opt", correlativas: [] },
+      { nombre: "Impuestos", cuatri: "3B", color: "conta", correlativas: [] },
+      { nombre: "Gerencia de Operaciones", cuatri: "3B", color: "admin", correlativas: ["Administración Empresarial II"] },
+      { nombre: "Liderazgo y Negociación", cuatri: "3B", color: "admin", correlativas: [] },
+      { nombre: "Finanzas Corporativas I", cuatri: "3B", color: "mate", correlativas: ["Cálculo Financiero"] },
+      // 4° Año - 1° Cuatrimestre
+      { nombre: "Optativa IV", cuatri: "4A", color: "opt", correlativas: [] },
+      { nombre: "Dirección Estratégica", cuatri: "4A", color: "admin", correlativas: [] },
+      { nombre: "Control de Gestión", cuatri: "4A", color: "conta", correlativas: [] },
+      { nombre: "Nuevas Tendencias en Administración", cuatri: "4A", color: "admin", correlativas: [] },
+      { nombre: "Consultoría", cuatri: "4A", color: "admin", correlativas: [] },
+      // 4° Año - 2° Cuatrimestre
+      { nombre: "Optativa V", cuatri: "4B", color: "opt", correlativas: [] },
+      { nombre: "Análisis Estratégico de Datos", cuatri: "4B", color: "tech", correlativas: [] },
+      { nombre: "Desarrollo Empresarial", cuatri: "4B", color: "admin", correlativas: [] },
+      { nombre: "Simulaciones y Toma de Decisiones en Negocios", cuatri: "4B", color: "admin", correlativas: [] },
+      { nombre: "Trabajo Integrador Final en Administración", cuatri: "4B", color: "opt", correlativas: [] },
+      { nombre: "Examen de Inglés", cuatri: "4B", color: "opt", correlativas: [] },
     ];
 
     const cuatris = {};
@@ -167,7 +201,7 @@
     });
 
     const malla = document.getElementById("malla");
-    for (let cuatri in cuatris) {
+    for (let cuatri of Object.keys(cuatris).sort()) {
       const col = document.createElement("div");
       col.className = "cuatrimestre";
       col.innerHTML = `<h3>${cuatri}</h3>`;
