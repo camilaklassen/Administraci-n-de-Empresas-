@@ -2,177 +2,207 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Malla Interactiva - Administración de Empresas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla de Administración de Empresas</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f7f9fc;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fdfdfd;
+      margin: 20px;
       color: #333;
-      margin: 0;
-      padding: 20px;
     }
-
     h1 {
       text-align: center;
-      color: #2c3e50;
       margin-bottom: 10px;
     }
-
+    .progreso {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .leyenda {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    .leyenda div {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .leyenda .color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .malla {
+      display: flex;
+      overflow-x: auto;
+      gap: 40px;
+    }
     .cuatrimestre {
-      background: white;
-      border-radius: 12px;
-      padding: 15px;
-      margin: 10px auto;
-      max-width: 800px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      min-width: 250px;
     }
-
-    h2 {
-      margin-top: 0;
-      color: #2980b9;
+    .cuatrimestre h3 {
+      text-align: center;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
     }
-
     .materia {
       display: flex;
       align-items: center;
-      margin: 6px 0;
-    }
-
-    .materia input {
-      margin-right: 10px;
-      transform: scale(1.2);
-    }
-
-    .materia label {
-      flex-grow: 1;
+      justify-content: space-between;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: color 0.2s ease-in-out;
+      transition: 0.2s;
+      position: relative;
     }
-
-    .materia label.tachada {
+    .materia.tachada {
       text-decoration: line-through;
-      color: #aaa;
+      opacity: 0.6;
     }
-
-    .bloqueada {
-      color: #bbb;
-      font-style: italic;
+    .materia .nota {
+      font-size: 16px;
+      cursor: pointer;
     }
-
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      color: #888;
-      font-size: 0.9em;
+    .nota-popup {
+      display: none;
+      position: absolute;
+      top: 110%;
+      left: 0;
+      z-index: 1;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 8px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 200px;
     }
+    .nota-popup textarea {
+      width: 100%;
+      height: 60px;
+      border: none;
+      resize: none;
+    }
+    .color-admin { background-color: #a7e9af; }
+    .color-mate { background-color: #d6c7f7; }
+    .color-human { background-color: #ffcfe3; }
+    .color-conta { background-color: #ffd6a5; }
+    .color-neg { background-color: #b2e0f7; }
+    .color-tech { background-color: #c3f7d6; }
+    .color-opt { background-color: #e0e0e0; }
   </style>
 </head>
 <body>
-  <h1>Malla Interactiva<br>Licenciatura en Administración de Empresas</h1>
-
-  <div id="malla"></div>
-
-  <footer>
-    Hecho por Camila Klassen · GitHub Pages 💻
-  </footer>
+  <h1>Malla Interactiva - Lic. en Administración</h1>
+  <div class="progreso" id="progreso">Progreso: 0%</div>
+  <div class="leyenda">
+    <div><span class="color color-admin"></span> Administración</div>
+    <div><span class="color color-mate"></span> Matemáticas / Estadística / Finanzas</div>
+    <div><span class="color color-human"></span> Humanidades / Derecho / Historia</div>
+    <div><span class="color color-conta"></span> Contabilidad / Costos / Impuestos</div>
+    <div><span class="color color-neg"></span> Negocios / Economía</div>
+    <div><span class="color color-tech"></span> Tecnología / Datos</div>
+    <div><span class="color color-opt"></span> Optativas / Finales</div>
+  </div>
+  <div class="malla" id="malla"></div>
 
   <script>
     const materias = [
-      { nombre: "Administración Empresarial I", cuatrimestre: "1° Año - 1° Cuatrimestre", correlativas: [], id: "adm1" },
-      { nombre: "Marketing", cuatrimestre: "1° Año - 1° Cuatrimestre", correlativas: [], id: "mkt" },
-      { nombre: "Escritura y Oralidad", cuatrimestre: "1° Año - 1° Cuatrimestre", correlativas: [], id: "escr" },
-      { nombre: "Introducción al Derecho", cuatrimestre: "1° Año - 1° Cuatrimestre", correlativas: [], id: "der1" },
-      { nombre: "Matemática Empresarial I", cuatrimestre: "1° Año - 1° Cuatrimestre", correlativas: [], id: "mat1" },
-
-      { nombre: "Administración Empresarial II", cuatrimestre: "1° Año - 2° Cuatrimestre", correlativas: ["adm1"], id: "adm2" },
-      { nombre: "Estadística Empresarial I", cuatrimestre: "1° Año - 2° Cuatrimestre", correlativas: [], id: "est1" },
-      { nombre: "Gestión de las Personas", cuatrimestre: "1° Año - 2° Cuatrimestre", correlativas: [], id: "gest" },
-      { nombre: "Contabilidad I", cuatrimestre: "1° Año - 2° Cuatrimestre", correlativas: [], id: "cont1" },
-      { nombre: "Historia Económica Mundial", cuatrimestre: "1° Año - 2° Cuatrimestre", correlativas: [], id: "hist" },
-
-      { nombre: "Matemática Empresarial II", cuatrimestre: "2° Año - 1° Cuatrimestre", correlativas: ["mat1"], id: "mat2" },
-      { nombre: "Microeconomía", cuatrimestre: "2° Año - 1° Cuatrimestre", correlativas: [], id: "micro" },
-      { nombre: "Derecho del Trabajo Individual", cuatrimestre: "2° Año - 1° Cuatrimestre", correlativas: ["der1"], id: "der2" },
-      { nombre: "Plataformas y Negocios Web", cuatrimestre: "2° Año - 1° Cuatrimestre", correlativas: [], id: "web" },
-      { nombre: "Desarrollo Internacional de Negocios", cuatrimestre: "2° Año - 1° Cuatrimestre", correlativas: ["mkt"], id: "din" },
-
-      { nombre: "Estadística Empresarial II", cuatrimestre: "2° Año - 2° Cuatrimestre", correlativas: ["est1"], id: "est2" },
-      { nombre: "Macroeconomía", cuatrimestre: "2° Año - 2° Cuatrimestre", correlativas: [], id: "macro" },
-      { nombre: "Obligaciones, Contratos y Sociedades", cuatrimestre: "2° Año - 2° Cuatrimestre", correlativas: ["der1"], id: "ocs" },
-      { nombre: "Diseño y Auditoría de Sistemas", cuatrimestre: "2° Año - 2° Cuatrimestre", correlativas: ["adm2"], id: "sis" },
-      { nombre: "Contabilidad Gerencial", cuatrimestre: "2° Año - 2° Cuatrimestre", correlativas: ["cont1"], id: "cont2" },
-
-      { nombre: "Sistemas de Costos", cuatrimestre: "3° Año - 1° Cuatrimestre", correlativas: ["cont1"], id: "costos" },
-      { nombre: "Cálculo Financiero", cuatrimestre: "3° Año - 1° Cuatrimestre", correlativas: ["mat2"], id: "calc" },
-      { nombre: "Programación Operativa", cuatrimestre: "3° Año - 1° Cuatrimestre", correlativas: [], id: "prog" },
-
-      { nombre: "Gerencia de Operaciones", cuatrimestre: "3° Año - 2° Cuatrimestre", correlativas: ["adm2"], id: "gerencia" },
-      { nombre: "Liderazgo y Negociación", cuatrimestre: "3° Año - 2° Cuatrimestre", correlativas: ["adm2"], id: "lider" },
-      { nombre: "Impuestos", cuatrimestre: "3° Año - 2° Cuatrimestre", correlativas: ["cont2"], id: "impuestos" },
-      { nombre: "Finanzas Corporativas I", cuatrimestre: "3° Año - 2° Cuatrimestre", correlativas: ["calc"], id: "finanzas" },
-
-      { nombre: "Dirección Estratégica", cuatrimestre: "4° Año - 1° Cuatrimestre", correlativas: ["adm2"], id: "estrategia" },
-      { nombre: "Nuevas Tendencias en Administración", cuatrimestre: "4° Año - 1° Cuatrimestre", correlativas: ["adm2", "gerencia"], id: "nuevas" },
-      { nombre: "Consultoría", cuatrimestre: "4° Año - 1° Cuatrimestre", correlativas: [], id: "consultoria" },
-      { nombre: "Control de Gestión", cuatrimestre: "4° Año - 1° Cuatrimestre", correlativas: ["costos"], id: "control" },
-
-      { nombre: "Simulaciones y Toma de Decisiones", cuatrimestre: "4° Año - 2° Cuatrimestre", correlativas: ["estrategia", "cont2"], id: "simu" },
-      { nombre: "Desarrollo Empresarial", cuatrimestre: "4° Año - 2° Cuatrimestre", correlativas: ["finanzas", "costos"], id: "desarrollo" },
-      { nombre: "Análisis Estratégico de Datos", cuatrimestre: "4° Año - 2° Cuatrimestre", correlativas: [], id: "datos" },
-      { nombre: "Trabajo Integrador Final en Administración", cuatrimestre: "4° Año - 2° Cuatrimestre", correlativas: [], id: "tif" },
-      { nombre: "Examen de Inglés", cuatrimestre: "4° Año - 2° Cuatrimestre", correlativas: [], id: "ingles" },
+      { nombre: "Administración Empresarial I", cuatri: "1A", color: "admin", correlativas: [] },
+      { nombre: "Marketing", cuatri: "1A", color: "neg", correlativas: [] },
+      { nombre: "Escritura y Oralidad", cuatri: "1A", color: "human", correlativas: [] },
+      { nombre: "Introducción al Derecho", cuatri: "1A", color: "human", correlativas: [] },
+      { nombre: "Matemática Empresarial I", cuatri: "1A", color: "mate", correlativas: [] },
+      { nombre: "Administración Empresarial II", cuatri: "1B", color: "admin", correlativas: ["Administración Empresarial I"] },
+      { nombre: "Estadística Empresarial I", cuatri: "1B", color: "mate", correlativas: [] },
+      { nombre: "Gestión de las Personas", cuatri: "1B", color: "admin", correlativas: [] },
+      { nombre: "Contabilidad I", cuatri: "1B", color: "conta", correlativas: [] },
+      { nombre: "Historia Económica Mundial", cuatri: "1B", color: "human", correlativas: [] },
+      // Puedes seguir agregando el resto así ↓
     ];
 
-    const estadoMaterias = {};
+    const cuatris = {};
+    materias.forEach(m => {
+      if (!cuatris[m.cuatri]) cuatris[m.cuatri] = [];
+      cuatris[m.cuatri].push(m);
+    });
 
-    function renderMalla() {
-      const container = document.getElementById("malla");
-      container.innerHTML = "";
-      const cuatrimestres = [...new Set(materias.map(m => m.cuatrimestre))];
+    const malla = document.getElementById("malla");
+    for (let cuatri in cuatris) {
+      const col = document.createElement("div");
+      col.className = "cuatrimestre";
+      col.innerHTML = `<h3>${cuatri}</h3>`;
+      cuatris[cuatri].forEach(m => {
+        const el = document.createElement("div");
+        el.className = `materia color-${m.color}`;
+        el.textContent = m.nombre;
 
-      cuatrimestres.forEach(cuatri => {
-        const div = document.createElement("div");
-        div.className = "cuatrimestre";
-        div.innerHTML = `<h2>${cuatri}</h2>`;
+        const notaIcon = document.createElement("span");
+        notaIcon.textContent = "📝";
+        notaIcon.className = "nota";
 
-        materias.filter(m => m.cuatrimestre === cuatri).forEach(m => {
-          const bloqueada = m.correlativas.some(c => !estadoMaterias[c]);
+        const popup = document.createElement("div");
+        popup.className = "nota-popup";
+        popup.innerHTML = `<textarea placeholder='Escribe una nota...'></textarea>`;
 
-          const materiaDiv = document.createElement("div");
-          materiaDiv.className = "materia";
+        notaIcon.onclick = e => {
+          e.stopPropagation();
+          popup.style.display = popup.style.display === "block" ? "none" : "block";
+        };
 
-          const checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.id = m.id;
-          checkbox.disabled = bloqueada;
-          checkbox.checked = estadoMaterias[m.id] || false;
-          checkbox.onchange = () => {
-            estadoMaterias[m.id] = checkbox.checked;
-            localStorage.setItem("estadoMaterias", JSON.stringify(estadoMaterias));
-            renderMalla();
-          };
+        popup.querySelector("textarea").value = localStorage.getItem(m.nombre + "_nota") || "";
+        popup.querySelector("textarea").oninput = e => {
+          localStorage.setItem(m.nombre + "_nota", e.target.value);
+        };
 
-          const label = document.createElement("label");
-          label.htmlFor = m.id;
-          label.innerText = m.nombre;
-          if (checkbox.checked) label.classList.add("tachada");
-          if (bloqueada && !checkbox.checked) label.classList.add("bloqueada");
+        el.appendChild(notaIcon);
+        el.appendChild(popup);
 
-          materiaDiv.appendChild(checkbox);
-          materiaDiv.appendChild(label);
-          div.appendChild(materiaDiv);
-        });
+        el.onclick = () => {
+          if (el.classList.contains("bloqueada")) return;
+          el.classList.toggle("tachada");
+          localStorage.setItem(m.nombre, el.classList.contains("tachada"));
+          actualizarProgreso();
+          verificarBloqueos();
+        };
 
-        container.appendChild(div);
+        malla.appendChild(col);
+        col.appendChild(el);
+        m.el = el;
       });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const saved = localStorage.getItem("estadoMaterias");
-      if (saved) Object.assign(estadoMaterias, JSON.parse(saved));
-      renderMalla();
-    });
+    function actualizarProgreso() {
+      const total = materias.length;
+      const hechas = materias.filter(m => m.el.classList.contains("tachada")).length;
+      const porcentaje = Math.round((hechas / total) * 100);
+      document.getElementById("progreso").textContent = `Progreso: ${porcentaje}%`;
+    }
+
+    function verificarBloqueos() {
+      materias.forEach(m => {
+        const deps = m.correlativas;
+        const habilitada = deps.every(dep => localStorage.getItem(dep) === "true");
+        m.el.classList.toggle("bloqueada", !habilitada);
+        m.el.style.opacity = habilitada ? "1" : "0.3";
+      });
+    }
+
+    window.onload = () => {
+      materias.forEach(m => {
+        const val = localStorage.getItem(m.nombre);
+        if (val === "true") m.el.classList.add("tachada");
+      });
+      actualizarProgreso();
+      verificarBloqueos();
+    };
   </script>
 </body>
 </html>
